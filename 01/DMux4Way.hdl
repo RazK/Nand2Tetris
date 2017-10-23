@@ -16,5 +16,27 @@ CHIP DMux4Way {
     OUT a, b, c, d;
 
     PARTS:
-    // Put your code here:
+	// save inversed selection to identify cases
+    Not(in=sel[0], out=notsel0);
+	Not(in=sel[1], out=notsel1);
+	
+	// selected a
+	And(a=notsel0, b=notsel1, out=selecteda);
+	And(a=selecteda, b=in, out=a);
+	
+	// selected b
+	And(a=sel[0], b=notsel1, out=selectedb);
+	And(a=selectedb, b=in, out=b);
+	
+	// selected c
+	And(a=notsel0, b=sel[1], out=selectedc);
+	And(a=selectedc, b=in, out=c);
+	
+	// selected d
+	And(a=sel[0], b=sel[1], out=selectedd);
+	And(a=selectedd, b=in, out=d);
+	
+	// NOTE: Another option was using the DMux in 2 layers, but this 
+	// method seemed more interesting and there were no instructions 
+	// to strive for minimal Nand count.
 }
